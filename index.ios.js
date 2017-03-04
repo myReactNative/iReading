@@ -6,6 +6,8 @@
 
 import { AppRegistry } from 'react-native';
 import Root from './app/root';
-import RootTest from './app/rootTest';
+// import RootTest from './app/rootTest';
+// import About from './app/pages/About';
+// import Splash from './app/pages/Splash';
 
-AppRegistry.registerComponent('iReading', () => RootTest);
+AppRegistry.registerComponent('iReading', () => Root);
