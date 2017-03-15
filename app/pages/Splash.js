@@ -36,7 +36,6 @@ class Splash extends React.Component {
             Storage.get('isInit')
             .then((isInit) => {
                 if (!isInit) {
-                    console.log('abcd');
                     routes.initCategory({ isFirst: true});
                 } else {
                     routes.tabbar();

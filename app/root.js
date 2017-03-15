@@ -9,6 +9,8 @@ const store = configureStore();
 //run root saga
 store.runSaga(rootSaga);
 
+// console.disableYellowBox = true;
+
 const Root = () => (
     <Provider store={store}>
         <App />

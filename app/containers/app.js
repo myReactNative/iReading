@@ -26,7 +26,23 @@ const RouterWithRedux = connect()(Router);
 const backButton = require('../img/arrow_left.png');
 
 const getSceneStyle = (props, computeProps) => {
-    const style = {};
+    const style = {
+        flex: 1,
+        backgroundColor: '#fff',
+        shadowColor: null,
+        shadowOffset: null,
+        shadowOpacity: null,
+        shadowRadius: null,
+    };
+
+    if (computeProps.isActive) {
+        style.marginTop = computeProps.hideNavBar ?
+            0 : Navigator.NavigationBar.Styles.General.TotalNavHeight;
+        style.marginBottom = computeProps.hideNavBar ? 0 : 50;
+    }
+
+    //console.log(style.marginTop);
+    //console.log(style.marginBottom);
 
     return style;
 }
@@ -35,7 +51,6 @@ class App extends Component {
 
     constructor(props) {
         super(props);
-        console.log("hello");
     }
 
     componentDidMount() {
@@ -60,6 +75,14 @@ class App extends Component {
                         type={ActionConst.REPLACE}
                     />
                     <Scene key="tabbar" tabs pressOpacity={0.8} type={ActionConst.REPLACE}>
+                        <Scene 
+                            key="main"
+                            component={MainContainer}
+                            hideNavBar
+                            title="阅读"
+                            icon={TabIcon}
+                            iconName="md-home"
+                        />
                         <Scene 
                             key="category"
                             component={CategoryContainer}
@@ -90,10 +113,11 @@ class App extends Component {
 
 const styles = StyleSheet.create({
     navBar: {
-
+        backgroundColor: '#3e9ce9'
     },
     navBarTitle: {
-
+        color: '#ffffff',
+        fontSize: 20,
     }
 });
 

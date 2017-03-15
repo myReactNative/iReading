@@ -7,8 +7,7 @@ export const request = (url, method, body) => {
     let isOk;
 
     return new Promise((resolve, reject) => {
-        console.log(HOST + url);
-        fetch(HOST + url, {
+        fetch(url, {
             method,
             headers: {
                 apikey: ''

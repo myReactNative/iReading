@@ -7,6 +7,7 @@ import * as readCreators from '../actions/read';
 class MainContainer extends Component {
     
     render() {
+        console.log("MainContainer");
         return (
             <Main {...this.props} />
         );
