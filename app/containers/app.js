@@ -20,6 +20,7 @@ import CategoryContainer from '../containers/CategoryContainer';
 import MainContainer from '../containers/MainContainer';
 import Feedback from '../pages/Feedback';
 import About from '../pages/About';
+import WebViewPage from '../pages/WebViewPage';
 import TabIcon from '../components/TabIcon';
 
 const RouterWithRedux = connect()(Router);
@@ -38,7 +39,7 @@ const getSceneStyle = (props, computeProps) => {
     if (computeProps.isActive) {
         style.marginTop = computeProps.hideNavBar ?
             0 : Navigator.NavigationBar.Styles.General.TotalNavHeight;
-        style.marginBottom = computeProps.hideNavBar ? 0 : 50;
+        style.marginBottom = computeProps.hideTabBar ? 0 : 50;
     }
 
     //console.log(style.marginTop);
@@ -74,7 +75,7 @@ class App extends Component {
                         hideTabBar
                         type={ActionConst.REPLACE}
                     />
-                    <Scene key="tabbar" tabs pressOpacity={0.8} type={ActionConst.REPLACE}>
+                    <Scene key="tabbar" tabs pressOpacity={0.8} type={ActionConst.REPLACE} tabBarStyle={styles.tabBarStyle}>
                         <Scene 
                             key="main"
                             component={MainContainer}
@@ -106,6 +107,7 @@ class App extends Component {
                         />
                     </Scene>
                 </Scene>
+                <Scene key="web" hideTabBar component={WebViewPage} />
             </RouterWithRedux>
         );
     }
@@ -118,7 +120,11 @@ const styles = StyleSheet.create({
     navBarTitle: {
         color: '#ffffff',
         fontSize: 20,
-    }
+    },
+    tabBarStyle: {
+        backgroundColor: '#a2c4c9',
+    },
+    
 });
 
 export default App;

@@ -57,6 +57,16 @@ class Main extends Component {
     componentDidMount() {
         const { readActions } = this.props;
 
+        DeviceEventEmitter.addListener('changeCategory', (typeIds) => {
+            typeIds.forEach((typeId) => {
+                readActions.requestArticleList(false, true, typeId);
+            });
+
+            this.setState({
+                typeIds
+            });
+        });
+
         InteractionManager.runAfterInteractions(() => {
             Storage.get('typeIds')
                 .then((typeIds) => {
@@ -89,6 +99,10 @@ class Main extends Component {
         }
     }
 
+    componentWillUnmount() {
+        DeviceEventEmitter.removeAllListeners('changeCategory');
+    }
+
     renderItem(article) {
         return (
             <TouchableOpacity onPress={() => this.onPress(article)}>
@@ -117,6 +131,7 @@ class Main extends Component {
 
     onPress(article) {
         const { routes } = this.context;
+        console.log(routes);
         routes.web({article})
     }
 
@@ -192,7 +207,7 @@ class Main extends Component {
 
         return (
             <ListView 
-                initialListSize={1}
+                initialListSize={5}
                 dataSource={dataSource}
                 renderRow={this.renderItem}
                 style={styles.listView}
@@ -349,5 +364,7 @@ const styles = StyleSheet.create({
         marginLeft: 10
     }
 });
+
+Main.contextTypes = contextTypes;
 
 export default Main;

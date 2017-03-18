@@ -35,6 +35,6 @@ function combine(state, action) {
 }
 
 function loadMore(state, action) {
-    state.articleList[action.typeId] = state.articleList[action.typeId].concat(articleList);
+    state.articleList[action.typeId] = state.articleList[action.typeId].concat(action.articleList);
     return state.articleList;
 }
