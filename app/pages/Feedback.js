@@ -14,6 +14,15 @@ import { Actions } from 'react-native-router-flux';
 import DeviceInfo from 'react-native-device-info';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { toastShort } from '../utils/ToastUtil';
+import ReadingToolBar from '../components/ReadingToolBar';
+
+const toolbarActions = [
+    {
+        title: '提交',
+        iconName: 'md-checkmark',
+        show: 'always'
+    }
+];
 
 let feedbackText;
 
@@ -27,13 +36,14 @@ class Feedback extends Component {
     componentDidMount() {
         feedbackText = '';
 
-        Actions.refresh({ renderRightButton: this.renderRightButton.bind(this)});
+        // Actions.refresh({ renderRightButton: this.renderRightButton.bind(this)});
     }
 
     onActionSelected() {
         if (feedbackText === undefined || feedbackText.replace(/\s+/g, '') === '') {
             toastShort('请填写建议内容哦～');
         } else {
+            const { navigator } = this.props;
             const feedback = AV.Object.new('Feedback');
             feedback.set('manufacturer', DeviceInfo.getManufacturer());
             feedback.set('system', DeviceInfo.getSystemName());
@@ -46,10 +56,12 @@ class Feedback extends Component {
             toastShort('您的问题已反馈，我们会及时跟进处理');
             this.textInput.clear();
             Keyboard.dismiss();
+
+            navigator.pop();
         }
     }
 
-    renderRightButton() {
+    /*renderRightButton() {
         return (
             <Icon.Button 
                 name="md-checkmark"
@@ -59,11 +71,18 @@ class Feedback extends Component {
                 onPress={this.onActionSelected}
             />
         )
-    }
+    }*/
 
     render() {
+        const { navigator } = this.props;
         return (
             <View style={styles.container}>
+                <ReadingToolBar 
+                    title="建议"
+                    actions={toolbarActions}
+                    onActionSelected={this.onActionSelected}
+                    navigator={navigator}
+                />
                 <TextInput 
                     ref = {(ref) => {this.textInput = ref;}}
                     style={styles.textInput}

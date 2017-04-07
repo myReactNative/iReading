@@ -19,7 +19,16 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Storage from '../utils/Storage';
 import GridView from '../components/GridView';
 import Button from '../components/Button';
+import ReadingToolBar from '../components/ReadingToolBar';
 import { toastShort } from '../utils/ToastUtil';
+
+const toolbarActions = [
+    {
+        title: '提交',
+        iconName: 'md-checkmark',
+        show: 'always'
+    }
+];
 
 let tempTypeIds = [];
 let maxCategory = 5;  //默认最多5个类别，远端可配置
@@ -29,9 +38,9 @@ const propTypes = {
     category: PropTypes.object.isRequired
 };
 
-const contextTypes = {
-    routes: PropTypes.object.isRequired
-};
+// const contextTypes = {
+//     routes: PropTypes.object.isRequired
+// };
 
 class Category extends Component {
 
@@ -62,9 +71,9 @@ class Category extends Component {
     }
 
     componentDidMount() {
-        if (! this.props.isFirst) {
-            Actions.refresh({ renderRightButton: this.renderRightButton.bind(this)});
-        }
+        // if (! this.props.isFirst) {
+        //     Actions.refresh({ renderRightButton: this.renderRightButton.bind(this)});
+        // }
 
         const { categoryActions } = this.props;
         categoryActions.requestTypeList();
@@ -100,7 +109,8 @@ class Category extends Component {
      * 选择类别事件
      */
     onSelectCategory() {
-        const { routes } = this.context;
+        // const { routes } = this.context;
+        const { navigator } = this.props;
         if (this.state.typeIds.length === 0) {
             Alert.alert(
                 '提示',
@@ -111,7 +121,11 @@ class Category extends Component {
                         text: '确定',
                         onPress: () => {
                             Storage.save('typeIds', this.state.typeIds);
-                            routes.tabbar();
+                            // routes.tabbar();
+                            navigator.replace({
+                                component: MainContainer,
+                                name: 'Main'
+                            });
                         }
                     },
                 ]
@@ -119,7 +133,11 @@ class Category extends Component {
         } else {
             Storage.save('typeIds', this.state.typeIds);
             Storage.save('isInit', true);
-            routes.tabbar();
+            // routes.tabbar();
+            navigator.replace({
+                component: MainContainer,
+                name: 'Main'
+            });
         }
     }
 
@@ -152,9 +170,11 @@ class Category extends Component {
     }
 
     resetRoute() {
-        const { routes } = this.context;
+        // const { routes } = this.context;
+        const { navigator } = this.props;
         DeviceEventEmitter.emit('changeCategory', this.state.typeIds);
-        routes.main();
+        // routes.main();
+        navigator.pop();
     }
 
     renderRightButton() {
@@ -211,6 +231,7 @@ class Category extends Component {
     }
 
     render() {
+        const { navigator , route } = this.props;
         if (this.props.isFirst) {
             return (
                 <View style={styles.container}>
@@ -232,6 +253,12 @@ class Category extends Component {
 
         return (
             <View style={styles.container}>
+                <ReadingToolBar 
+                    title="分类"
+                    actions={toolbarActions}
+                    navigator={navigator}
+                    onActionSelected={this.onActionSelected}
+                />
                 <View style={styles.header}>
                     <Text style={[styles.btnText, { color: 'black' }]}>
                         请选择您感兴趣的1-5个类别
@@ -288,6 +315,6 @@ const styles = StyleSheet.create({
 });
 
 Category.propTypes = propTypes;
-Category.contextTypes = contextTypes;
+// Category.contextTypes = contextTypes;
 
 export default Category;

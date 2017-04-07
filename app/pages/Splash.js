@@ -8,11 +8,13 @@ import {
     StyleSheet
 } from 'react-native';
 
+import MainContainer from '../containers/MainContainer';
+import CategoryContainer from '../containers/CategoryContainer';
 import Storage from '../utils/Storage';
 
-const contextTypes = {
-    routes: PropTypes.object.isRequired
-};
+// const contextTypes = {
+//     routes: PropTypes.object.isRequired
+// };
 
 const maxHeight = Dimensions.get('window').height;
 const maxWidth = Dimensions.get('window').width;
@@ -27,7 +29,8 @@ class Splash extends React.Component {
     };
 
     componentDidMount() {
-        const { routes } = this.context;
+        // const { routes } = this.context;
+        const { navigator } = this.props;
         Animated.timing(
             this.state.bounceValue,
             {toValue:1.2, duration:1000}
@@ -36,9 +39,18 @@ class Splash extends React.Component {
             Storage.get('isInit')
             .then((isInit) => {
                 if (!isInit) {
-                    routes.initCategory({ isFirst: true});
+                    // routes.initCategory({ isFirst: true});
+                    navigator.resetTo({
+                        component: CategoryContainer,
+                        name: 'Category',
+                        isFirst: true
+                    })
                 } else {
-                    routes.tabbar();
+                    // routes.tabbar();
+                    navigator.resetTo({
+                        component: MainContainer,
+                        name: 'Main'
+                    })
                 }
             });
         }, 1000);
@@ -58,6 +70,6 @@ class Splash extends React.Component {
     }
 }
 
-Splash.contextTypes = contextTypes;
+// Splash.contextTypes = contextTypes;
 
 export default Splash;

@@ -10,11 +10,13 @@ import {
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Button from '../components/Button';
+import ReadingToolBar from '../components/ReadingToolBar';
 
-const API_STORE = 'http://apistore.baidu.com/';
+const API_STORE = 'https://www.showapi.com/';
 const READING_REPO = 'https://github.com/myReactNative/iReading';
 
 const aboutLogo = require('../img/about_logo.png');
+
 
 class About extends Component {
     
@@ -23,8 +25,13 @@ class About extends Component {
     }
 
     render() {
+        const { navigator } = this.props;
         return (
             <View style={styles.container}>
+                <ReadingToolBar 
+                    title="关于我们"
+                    navigator={navigator}
+                />
                 <View style={styles.content}>
                     <View style={styles.center}>
                         <Image 

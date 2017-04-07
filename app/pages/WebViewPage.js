@@ -20,12 +20,22 @@ import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { toastShort } from '../utils/ToastUtil';
 import LoadingView from '../components/LoadingView';
+import ReadingToolBar from '../components/ReadingToolBar';
+
+const toolbarActions = [
+    {
+        title: '分享',
+        iconName: 'md-share',
+        show: 'always'
+    }
+]
 
 let canGoBack = false;
 
 class WebViewPage extends Component {
     constructor(props) {
         super(props);
+        console.log(props);
 
         this.state = {
             isShareModal: false
@@ -37,10 +47,10 @@ class WebViewPage extends Component {
     }
 
     componentDidMount() {
-        Actions.refresh({
-            title: this.props.article.userName,
-            renderRightButton: this.renderRightButton.bind(this)
-        });
+        // Actions.refresh({
+        //     title: this.props.article.userName,
+        //     renderRightButton: this.renderRightButton.bind(this)
+        // });
 
         BackAndroid.addEventListener('hardwareBackPress', this.goBack);
     }
@@ -91,7 +101,7 @@ class WebViewPage extends Component {
     }
 
     renderSpinner() {
-        const { article } = this.props;
+        const { route } = this.props;
 
         return (
             <TouchableWithoutFeedback
@@ -105,7 +115,7 @@ class WebViewPage extends Component {
                     key={'spinner'}
                     style={styles.spinner}
                 >
-                    <Text>{article.title}</Text>
+                    <Text>{route.article.title}</Text>
                 </View>
 
             </TouchableWithoutFeedback>
@@ -113,8 +123,15 @@ class WebViewPage extends Component {
     }
 
     render() {
+        const { navigator, route } = this.props;
         return (
             <View style={styles.container}>
+                <ReadingToolBar 
+                    actions={toolbarActions}
+                    onActionSelected = {this.onActionSelected}
+                    title={route.article.title}
+                    navigator={navigator}
+                />
                 <Modal
                     animationType="fade"
                     visible={this.state.isShareModal}
@@ -131,7 +148,7 @@ class WebViewPage extends Component {
                     ref={(ref) => {this.webview = ref;}}
                     automaticallyAdjustContentInsets={false}
                     style={styles.base}
-                    source={{ uri: this.props.article.url }}
+                    source={{ uri: route.article.url }}
                     javaScriptEnabled
                     domStorageEnabled
                     startInLoadingState
